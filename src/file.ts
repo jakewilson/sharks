@@ -7,7 +7,7 @@ async function predict(file: File): Promise<PredictResult> {
   const formData = new FormData()
   formData.append('file', file)
 
-  return fetch('http://144.202.29.17:5000/predict', {
+  return fetch('/api/predict', {
     method: 'POST',
     body: formData,
     mode: 'cors',

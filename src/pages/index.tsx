@@ -3,11 +3,14 @@ import { ChangeEvent, useState } from 'react'
 
 export default function Home() {
   const [predictResults, setPredictResults] = useState<PredictResult | null>(null)
+  const [img, setImg] = useState<string>("")
 
   const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      predict(e.target.files[0])
+      const file = e.target.files[0]
+      predict(file)
         .then(setPredictResults)
+        .then(() => setImg(URL.createObjectURL(file)))
     }
   }
 
@@ -25,7 +28,12 @@ export default function Home() {
         onChange={onFileChange}
       />
       { predictResults && (
-        <h2>{ predictResults.shark_type }: { predictResults.prob.toPrecision(4) }%</h2>
+        <div className={`flex-col items-center justify-between`}>
+          <img src={img} width="224" height="224" />
+          <h2 className={`font-bold`}>
+            { predictResults.shark_type.toUpperCase() } SHARK: { predictResults.prob.toPrecision(4) }%
+          </h2>
+        </div>
       )}
     </main>
   )
